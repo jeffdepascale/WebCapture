@@ -1,5 +1,5 @@
 
-a5.Package('com.jeffdepascale.webCapture')
+a5.Package('com.jeffdepascale.webCapture.testAps.recorder')
 	
 	.Import('com.jeffdepascale.webCapture.recorder.*')
 	.Extends('a5.cl.CLMain')
@@ -12,10 +12,10 @@ a5.Package('com.jeffdepascale.webCapture')
 			params = _params;
 			cls.Super(params);
 			cls.dependencies([
-				'../src/recorder/Recorder.js',
-				'../src/recorder/DataLogger.js',
-				'../src/recorder/MovementCapturer.js',
-				'../src/recorder/ScreenScraper.js'
+				'../../src/recorder/Recorder.js',
+				'../../src/recorder/DataLogger.js',
+				'../../src/recorder/MovementCapturer.js',
+				'../../src/recorder/ScreenScraper.js'
 			])
 		}	
 		

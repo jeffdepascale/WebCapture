@@ -56,11 +56,11 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 		}
 		
 		var processHTML = function(html){
-		    return html.replace(/<script.*?>[\s\S]*?<\/.*?script>/g, "")
+			return encodeURIComponent(html.replace(/<script.*?>[\s\S]*?<\/.*?script>/g, "")
 			.replace(/<link.*?>[\s\S]*?<\/.*?link>/g, "")
 			.replace(/<style.*?>[\s\S]*?<\/.*?style>/g, "")
 			.replace('</head>', '<style>' + storedCSS + '</style></head>')
-			.replace(/\s{2,}/g,' ').replace('> <', '');
+			.replace(/\s{2,}/g,' ').replace('> <', '><'));
 		}
 		
 });

@@ -18,6 +18,7 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			moveTimer,
 			scrapeTimer,
 			endTimer,
+			moveRate = 5,
 			startTime;
 		
 		cls.Recorder = function(_recordDelayTime, _maxRecordTime, _resolution){
@@ -27,7 +28,7 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			resolution = _resolution || 1000;
 			recordDelayTime = _recordDelayTime || 0;
 			maxRecordTime  =  _maxRecordTime || 1.5;
-			dataLogger = new im.DataLogger();
+			dataLogger = new im.DataLogger(resolution, moveRate);
 			screenScraper = new im.ScreenScraper();
 			movementCapturer = new im.MovementCapturer();
 			setTimeout(startRecording, recordDelayTime*1000);
@@ -37,10 +38,12 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			movementCapturer.initialize();
 			screenScraper.initialize();
 			startTime = new Date();
-			moveTimer = setInterval(moveTick, resolution/5);
+			moveTimer = setInterval(moveTick, resolution/moveRate);
 			scrapeTimer = setInterval(scrapeTick, resolution);
 			if(maxRecordTime)
 				endTimer = setTimeout(endRecord, maxRecordTime*1000);
+			moveTick();
+			scrapeTick();
 		},
 		
 		moveTick = function(){

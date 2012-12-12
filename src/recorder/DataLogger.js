@@ -5,13 +5,16 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 	.Class('DataLogger', function(cls, im){
 		
 		var movementLog,
-			screenCapLog;
+			screenCapLog,
+			resolution,
+			moveRate;
 		
-		cls.DataLogger = function(){
+		cls.DataLogger = function(_resolution, _moveRate){
 			cls.Super();
 			movementLog = [];
 			screenCapLog = [];
-			
+			resolution = resolution;
+			moveRate = _moveRate;		
 		}
 		
 		cls.logMovement = function(log, time){
@@ -25,7 +28,11 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 		cls.getData = function(){
 			return JSON.stringify({
 				movement:movementLog,
-				screen:screenCapLog
+				screen:screenCapLog,
+				playerInfo:{
+					resolution:resolution,
+					moveRate:moveRate
+				}
 			});
 		}
 		

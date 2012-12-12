@@ -2521,9 +2521,7 @@ a5.Package('a5.cl')
 		}
 });
 
-
-
-﻿a5.Package('a5.cl')
+a5.Package('a5.cl')
 
     .Extends('a5.cl.CLBase')
     .Prototype('CLInitializer', function (cls, im) {
@@ -5807,7 +5805,6 @@ a5.Package('a5.cl.initializers.dom')
 		}
 });
 
-﻿
 a5.Package('a5.cl.initializers.dom')
 
 	.Extends('a5.cl.CLAddon')
