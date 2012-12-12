@@ -21,6 +21,11 @@ a5.Package('com.jeffdepascale.webCapture')
 		
 		cls.Override.applicationLaunched = function(){
 			recorder = new im.Recorder(params.recordDelayTime, params.maxRecordTime);
+			recorder.addEventListener(im.Recorder.COMPLETE, eRecordCompleteHandler);
+		}
+		
+		var eRecordCompleteHandler = function(e){
+			console.log(e.data());
 		}
 })
 

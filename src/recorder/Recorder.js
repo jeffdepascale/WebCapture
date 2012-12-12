@@ -2,7 +2,12 @@
 a5.Package('com.jeffdepascale.webCapture.recorder')
 
 	.Extends('a5.cl.CLBase')
-	.Class('Recorder', function(cls, im){
+	.Static(function(Recorder){
+		
+		Recorder.COMPLETE = 'webCaptureRecorderComplete';
+		
+	})
+	.Class('Recorder', function(cls, im, Recorder){
 		
 		var recordDelayTime,
 			maxRecordTime,
@@ -53,6 +58,7 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 		endRecord = function(){
 			clearInterval(moveTimer);
 			clearInterval(scrapeTimer);
+			cls.dispatchEvent(Recorder.COMPLETE, dataLogger.getData());
 		}
 	
 });

@@ -5311,7 +5311,7 @@ a5.Package('a5.cl.initializers.dom')
 						url = im.Utils.makeAbsolutePath(checkReplacements(url));
 						if(cacheBreakValue)
 							url = url + '?a5=' + cacheBreakValue;
-						if (type === 'css') {
+						if (type === 'css'  && xhrDependencies === false && asXHR == false) {
 							var cssError = function(){
 								if (onerror) onerror(url);
 								else self.throwError('Error loading css resource at url ' + url);
@@ -5370,7 +5370,7 @@ a5.Package('a5.cl.initializers.dom')
 								},
 								error: function(){
 									if (onerror) onerror(url);
-									else self.redirect(500, 'Error loading resource at url ' + url);
+									else throw 'Error loading resource at url ' + url;
 								}
 							}
 							if (typeof itemCallback === 'function') {

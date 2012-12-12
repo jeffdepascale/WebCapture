@@ -22,4 +22,11 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			screenCapLog.push({data:log, time:time});
 		}
 		
+		cls.getData = function(){
+			return JSON.stringify({
+				movement:movementLog,
+				screen:screenCapLog
+			});
+		}
+		
 });
