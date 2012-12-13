@@ -13,12 +13,12 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			cls.Super();
 			movementLog = [];
 			screenCapLog = [];
-			resolution = resolution;
+			resolution = _resolution;
 			moveRate = _moveRate;		
 		}
 		
-		cls.logMovement = function(log, time){
-			movementLog.push({data:log, time:time});
+		cls.logMovement = function(log){
+			movementLog.push(log);
 		}
 		
 		cls.logScreen = function(log, time){

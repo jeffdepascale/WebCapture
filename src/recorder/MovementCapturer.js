@@ -7,12 +7,16 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 		var lastRetObj,
 			mouseX,
 			mouseY,
+			clickX,
+			clickY,
 			scrollTop,
 			scrollLeft,
 			windowHeight,
 			windowWidth,
+			keys,
 			resizeElem,
-			resizeUseInner;
+			resizeUseInner,
+			waitTime;
 		
 		cls.MovementCapturer = function(){
 			cls.Super();
@@ -22,19 +26,25 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 			window.onmousemove = handleMouseMoveEvent;
 			window.onscroll = handleScrollEvent;
 			window.onresize = handleResizeEvent;
+			window.onclick = handleClickEvent;
+			window.onkeypress = handleKeyEvent;
 			if (document.documentElement && document.documentElement.clientHeight) resizeElem = document.documentElement;
 			else if (document.body && document.body.clientHeight) resizeElem = document.body;
 			resizeUseInner = typeof(window.innerHeight) == 'number';
 		}
 		
-		cls.capture = function(){
+		cls.capture = function(){		
 			var retObj = {},
 				shouldReturn = false;
-			if(mouseX || mouseY){
+			if(clickX || clickY){
+				retObj.c = { x:clickX, y:clickY };
+				clickX = clickY = null;
+				shouldReturn = true;
+			} else if(mouseX || mouseY){
 				retObj.m ={ x:mouseX, y:mouseY };
 				mouseX = mouseY = null;
 				shouldReturn = true;
-			}	
+			} 
 			if(scrollLeft || scrollTop){
 				retObj.s = { l: scrollLeft, t: scrollTop };
 				scrollLeft = scrollTop = null;
@@ -45,12 +55,24 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 				windowWidth = windowHeight = null;
 				shouldReturn = true;
 			}
+			if(keys){
+				retObj.k = true;
+				keys = null;
+				shouldReturn = true;
+			}
 			
 			if (shouldReturn) {
+				if (waitTime) {
+					retObj.wt = new Date() - waitTime;
+					waitTime = null;
+				}
 				lastRetObj = retObj;
 				return retObj;
-			} else 
+			} else {
+				if(!waitTime)
+					waitTime = new Date();			
 				return null;
+			}
 		}
 			
 		var handleMouseMoveEvent = function(e) {
@@ -88,6 +110,28 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 				windowHeight = wh;
 				windowWidth = ww;
 			}
+		},
+		
+		handleClickEvent = function(e){
+			if (!e)
+				e = window.event;
+			var mx, my;
+			cx = e.clientX;
+			cy = e.clientY;
+			if (!lastRetObj || (lastRetObj && !lastRetObj.c) || (lastRetObj.c.x != mx || lastRetObj.c.y != my)) {
+				clickX = cx;
+				clickY = cy;
+			}
+		},
+		
+		handleKeyEvent = function(e){
+			if (!e)
+				e = window.event;
+			var k = String.fromCharCode(e.charCode);
+			if(keys == null)
+				keys = [k];
+			else
+				keys.push(k);
 		}
 		
 });

@@ -22,10 +22,13 @@ a5.Package('com.jeffdepascale.webCapture.testAps.recorder')
 		cls.Override.applicationLaunched = function(){
 			recorder = new im.Recorder(params.recordDelayTime, params.maxRecordTime);
 			recorder.addEventListener(im.Recorder.COMPLETE, eRecordCompleteHandler);
+			setTimeout(function(){
+				document.getElementById('moveme').style.top = '50px';
+			}, 2000);
 		}
 		
 		var eRecordCompleteHandler = function(e){
-			console.log(e.data());
+			document.body.innerHTML = e.data();
 		}
 })
 

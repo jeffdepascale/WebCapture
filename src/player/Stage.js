@@ -6,6 +6,7 @@ a5.Package('com.jeffdepascale.webCapture.player')
 		
 		var iframe,
 			iframeDoc,
+			data,
 			playerArea;
 		
 		cls.Stage = function(_playerArea){
@@ -14,8 +15,18 @@ a5.Package('com.jeffdepascale.webCapture.player')
 			createFrame();
 		}
 		
-		cls.updateHtml = function(html){
-			iframeDoc.write(html);
+		cls.play = function(_data){
+			data = _data;
+			drawNextFrame();
+		}
+		
+		var drawNextFrame = function(){
+			var d = data.shift();
+			iframeDoc.open();
+			iframeDoc.write(decodeURIComponent(d.data));
+			iframeDoc.close();
+			if(data.length)
+				setTimeout(drawNextFrame, data[0].time);
 		}
 		
 		var createFrame = function(){

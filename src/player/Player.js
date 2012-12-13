@@ -5,18 +5,22 @@ a5.Package('com.jeffdepascale.webCapture.player')
 	.Class('Player', function(cls, im){
 		
 		var stage,
-			cursor,
+			mover,
 			resolution,
 			moveRate,
 			stageData,
 			moveData,
-			playerArea;
+			playerArea,
+			wrapperElemID,
+			assetPath;
 		
-		cls.Player = function(){
+		cls.Player = function(_wrapperElemID, _assetPath){
 			cls.Super();
+			wrapperElemID = _wrapperElemID;
+			assetPath = _assetPath;
 			createArea();
 			stage = new im.Stage(playerArea);
-			cursor = new im.Cursor(playerArea);
+			mover = new im.Mover(playerArea, assetPath);
 		}
 		
 		cls.play = function(playbackData){
@@ -25,21 +29,11 @@ a5.Package('com.jeffdepascale.webCapture.player')
 			moveRate = data.playerInfo.moveRate;
 			moveData = data.movement;
 			stageData = data.screen;
-			moveTimer = setInterval(moveTick, resolution/moveRate);
-			//stageTimer = setInterval(stageTick, resolution);
-			moveTick();
-			stageTick();
+			stage.play(stageData);
+			mover.play(moveData, resolution, moveRate);
 		}
 		
-		var moveTick = function(){
-		
-		}, 
-		
-		stageTick = function(){
-			stage.updateHtml(decodeURIComponent(stageData[0].data));
-		}, 
-		
-		createArea = function(){
+		var createArea = function(){
 			var wrapper = document.createElement('div');
 			wrapper.style.width = wrapper.style.height = '100%';
 			wrapper.style.display = 'block';
@@ -50,7 +44,7 @@ a5.Package('com.jeffdepascale.webCapture.player')
 			playerArea.style.width = '90%';
 			playerArea.style.margin = '0px auto';
 			playerArea.style.overflow = 'hidden';
-			document.body.appendChild(wrapper);
+			document.getElementById(wrapperElemID).appendChild(wrapper);
 			wrapper.appendChild(playerArea);
 		}
 });

@@ -43,24 +43,45 @@ a5.Package('com.jeffdepascale.webCapture.recorder')
 		}
 		
 		var processCSS = function(url){
-			if (url.indexOf('://') == -1) {
-				if(url.substr(0, 1) == '/')
-					url = location.protocol +'//' + location.hostname + url;
-				else
-					url = location.href.match(/^.*\//) + url;
-			}
+			url = absPath(url);
 			cls.cl().initializer().resourceCache().load(url, function(data){
 				if(data)
 					storedCSS += '\n' + data;
 			}, function(){}, null, true);
 		}
 		
+		var absPath = function(url){
+			if (url.indexOf('://') == -1) {
+				if(url.substr(0, 1) == '/')
+					url = location.protocol +'//' + location.hostname + url;
+				else
+					url = location.href.match(/^.*\//) + url;
+			}
+			return url;
+		}
+		
 		var processHTML = function(html){
+			var match = html.match(/<img.*?[\s\S]*?src=/g),
+				lastIndex = 0;
+			while(match.length){
+				var ind = html.indexOf(match[0], lastIndex) + match[0].length+1,
+					end = html.substring(ind).search(/'|"/) + ind,
+					closeTag = html.substring(ind).search(/>/) + ind,
+					repl = '';
+				if (closeTag > end) {
+					var val = html.substring(ind, end);
+					repl = absPath(val);
+					html = html.replace(val, repl);
+				}			
+				lastIndex = ind + repl.length;
+				match.shift();
+			}
+			
 			return encodeURIComponent(html.replace(/<script.*?>[\s\S]*?<\/.*?script>/g, "")
-			.replace(/<link.*?>[\s\S]*?<\/.*?link>/g, "")
+			.replace(/<link.*?[\s\S]*?>/g, "")
 			.replace(/<style.*?>[\s\S]*?<\/.*?style>/g, "")
 			.replace('</head>', '<style>' + storedCSS + '</style></head>')
-			.replace(/\s{2,}/g,' ').replace('> <', '><'));
+			.replace(/\s{1,}/g,' ').replace('> <', '><'));
 		}
 		
 });
